@@ -5,37 +5,33 @@ import numpy as np
 from ggnn import GGNN
 from utils import Data
 import pickle
-import argparse
 import datetime
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', default='sample', help='dataset name: diginetica/yoochoose1_4/yoochoose1_64/sample')
-parser.add_argument('--method', type=str, default='ggnn', help='ggnn/gat/gcn')
-parser.add_argument('--validation', action='store_true', help='validation')
-parser.add_argument('--epoch', type=int, default=30, help='number of epochs to train for')
-parser.add_argument('--batchSize', type=int, default=100, help='input batch size')
-parser.add_argument('--hiddenSize', type=int, default=100, help='hidden state size')
-parser.add_argument('--l2', type=float, default=1e-5, help='l2 penalty')
-parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
-parser.add_argument('--step', type=int, default=1, help='gnn propogation steps')
-parser.add_argument('--nonhybrid', action='store_true', help='global preference')
-parser.add_argument('--lr_dc', type=float, default=0.1, help='learning rate decay rate')
-parser.add_argument('--lr_dc_step', type=int, default=3, help='the number of steps after which the learning rate decay')
-opt = parser.parse_args()
-train_data = pickle.load(open(opt.dataset + '/train.txt', 'rb'))
-test_data = pickle.load(open(opt.dataset + '/test.txt', 'rb'))
-# all_train_seq = pickle.load(open('../datasets/' + opt.dataset + '/all_train_seq.txt', 'rb'))
+
+dataset = 'sample'
+method = 'ggnn'
+epoch = 30
+batchSize = 50
+hiddenSize = 100
+l2=1e-5
+lr = 0.001
+step = 1
+nonhybrid = 'store_true'
+lr_dc = 0.1
+lr_dc_step = 3
 n_node = 310
-# g = build_graph(all_train_seq)
-train_data = Data(train_data, sub_graph=True, method=opt.method, shuffle=True)
-test_data = Data(test_data, sub_graph=True, method=opt.method, shuffle=False)
-model = GGNN(hidden_size=opt.hiddenSize, out_size=opt.hiddenSize, batch_size=opt.batchSize, n_node=n_node,
-                 lr=opt.lr, l2=opt.l2,  step=opt.step, decay=opt.lr_dc_step * len(train_data.inputs) / opt.batchSize, lr_dc=opt.lr_dc,
-                 nonhybrid=opt.nonhybrid)
-print(opt)
 best_result = [0, 0]
 best_epoch = [0, 0]
-for epoch in range(opt.epoch):
+
+train_data = pickle.load(open(dataset + '/train.txt', 'rb'))
+test_data = pickle.load(open(dataset + '/test.txt', 'rb'))
+
+train_data = Data(train_data, sub_graph=True, method=method, shuffle=True)
+test_data = Data(test_data, sub_graph=True, method=method, shuffle=False)
+model = GGNN(hidden_size=hiddenSize, out_size=hiddenSize, batch_size=batchSize, n_node=n_node, lr=lr, l2=l2, 
+                step=step, decay=lr_dc_step * len(train_data.inputs) / batchSize, lr_dc=lr_dc, nonhybrid=nonhybrid)
+
+for epoch in range(epoch):
     print('epoch: ', epoch, '===========================================')
     slices = train_data.generate_batch(model.batch_size)
     fetches = [model.opt, model.loss_train, model.global_step]
@@ -69,5 +65,6 @@ for epoch in range(opt.epoch):
     if mrr >= best_result[1]:
         best_result[1] = mrr
         best_epoch[1]=epoch
+    
     print('train_loss:\t%.4f\ttest_loss:\t%4f\tRecall@20:\t%.4f\tMMR@20:\t%.4f\tEpoch:\t%d,\t%d'%
           (loss, test_loss, best_result[0], best_result[1], best_epoch[0], best_epoch[1]))
