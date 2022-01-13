@@ -1,15 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time : 2018/9/23 2:52
-# @Author : {ZM7}
-# @File : utils.py
-# @Software: PyCharm
-
 import networkx as nx
 import numpy as np
+import matplotlib.pyplot as plt
 
 
-def build_graph(train_data):
+def build_graph(train_data,data_name):
     graph = nx.DiGraph()
     for seq in train_data:
         for i in range(len(seq) - 1):
@@ -25,6 +19,8 @@ def build_graph(train_data):
         if sum != 0:
             for j, i in graph.in_edges(i):
                 graph.add_edge(j, i, weight=graph.get_edge_data(j, i)['weight'] / sum)
+    nx.draw(graph)
+    plt.savefig(data_name)
     return graph
 
 
@@ -51,9 +47,10 @@ def split_validation(train_set, valid_portion):
 
 
 class Data():
-    def __init__(self, data, sub_graph=False, method='ggnn', sparse=False, shuffle=False):
+    def __init__(self, data, sub_graph=False, method='ggnn', sparse=False, shuffle=False,data_name='train'):
         inputs = data[0]
         inputs, mask, len_max = data_masks(inputs, [0])
+        build_graph(data[0],data_name)
         self.inputs = np.asarray(inputs)
         self.mask = np.asarray(mask)
         self.len_max = len_max

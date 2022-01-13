@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time : 2018/10/16 4:36
-# @Author : {ZM7}
-# @File : model.py
-# @Software: PyCharm
 import tensorflow as tf
 import math
 
@@ -14,8 +9,8 @@ class Model(object):
         self.out_size = out_size
         self.batch_size = batch_size
         self.mask = tf.placeholder(dtype=tf.float32)
-        self.alias = tf.placeholder(dtype=tf.int32)  # 给给每个输入重新
-        self.item = tf.placeholder(dtype=tf.int32)   # 重新编号的序列构成的矩阵
+        self.alias = tf.placeholder(dtype=tf.int32)
+        self.item = tf.placeholder(dtype=tf.int32)
         self.tar = tf.placeholder(dtype=tf.int32)
         self.nonhybrid = nonhybrid
         self.stdv = 1.0 / math.sqrt(self.hidden_size)
