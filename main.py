@@ -32,8 +32,8 @@ best_epoch = [0, 0]
 train_data = pickle.load(open(dataset + '/train.txt', 'rb'))
 test_data = pickle.load(open(dataset + '/test.txt', 'rb'))
 
-train_data = Data(train_data, sub_graph=True, method=method, shuffle=True)
-test_data = Data(test_data, sub_graph=True, method=method, shuffle=False)
+train_data = Data(train_data, sub_graph=True, method=method, shuffle=True,data_name='train')
+test_data = Data(test_data, sub_graph=True, method=method, shuffle=False,data_name='test')
 model = GGNN(hidden_size=hiddenSize, out_size=hiddenSize, batch_size=batchSize, n_node=n_node, lr=lr, l2=l2, 
                 step=step, decay=lr_dc_step * len(train_data.inputs) / batchSize, lr_dc=lr_dc, nonhybrid=nonhybrid)
 
