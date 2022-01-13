@@ -48,11 +48,13 @@ class Preprocess():
         #take top 5 click
         sess_clicks, sess_date = self.filter_top_5(sess_clicks,sess_date,iid_counts)
 
+        #max date for split
         maxdate, dates = self.get_max_date(sess_date)
 
         # 7 days for test
         splitdate = maxdate - 86400 * 7
 
+        #split data train test
         train_sess, test_sess = self.spit_data(dates,splitdate)      # Yoochoose: ('Split date', 1411930799.0)
         train_sess, test_sess = self.sort_sessions_by_date(train_sess, test_sess)
         
