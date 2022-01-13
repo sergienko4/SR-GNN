@@ -3,10 +3,16 @@
 from __future__ import division
 import numpy as np
 from ggnn import GGNN
+from preprocess import Preprocess
 from utils import Data
 import pickle
 import datetime
 
+
+#####preprocess data 
+
+pre_process = Preprocess()
+pre_process.start()
 
 dataset = 'sample'
 method = 'ggnn'
