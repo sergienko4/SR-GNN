@@ -55,7 +55,7 @@ class Preprocess():
         splitdate = maxdate - 86400 * 7
 
         #split data train test
-        train_sess, test_sess = self.spit_data(dates,splitdate)      # Yoochoose: ('Split date', 1411930799.0)
+        train_sess, test_sess = self.spit_data(dates,splitdate)
         train_sess, test_sess = self.sort_sessions_by_date(train_sess, test_sess)
         
         train_ids, train_dates, train_seqs = self.obtian_train(train_sess,sess_clicks,item_dict)
@@ -130,8 +130,8 @@ class Preprocess():
     def sort_sessions_by_date(self,train_sess, test_sess):
         train_sess = sorted(train_sess, key=operator.itemgetter(1))     # [(session_id, timestamp), (), ]
         test_sess = sorted(test_sess, key=operator.itemgetter(1))     # [(session_id, timestamp), (), ]
-        print(len(train_sess))    # 186670    # 7966257
-        print(len(test_sess))    # 15979     # 15324
+        print(len(train_sess))
+        print(len(test_sess))
         print(train_sess[:3])
         print(test_sess[:3])
         return train_sess, test_sess
@@ -156,7 +156,7 @@ class Preprocess():
             train_ids += [s]
             train_dates += [date]
             train_seqs += [outseq]
-        print(item_ctr)     # 43098, 37484
+        print(item_ctr)
         return train_ids, train_dates, train_seqs
 
     def obtian_test(self,test_sess,sess_clicks,item_dict):
