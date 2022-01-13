@@ -1,14 +1,9 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time : 2018/10/17 5:40
-# @Author : {ZM7}
-# @File : main.py
-# @Software: PyCharm
 
 from __future__ import division
 import numpy as np
-from model import *
-from utils import build_graph, Data, split_validation
+from ggnn import GGNN
+from utils import Data
 import pickle
 import argparse
 import datetime
